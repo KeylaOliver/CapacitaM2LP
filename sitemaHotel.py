@@ -98,3 +98,74 @@ class HOTEL_MANAGEMENT_checkin:
         quartos_livres = len(self.quartos) - quartos_ocupados
         print("\nResumo:")
         print(f"Total de Quartos: {len(self.quartos)}")
+        print(f"Quartos Ocupados: {quartos_ocupados}")
+        print(f"Quartos Disponíveis: {quartos_livres}")
+        print("Quartos Livres:", ', '.join(map(str, quartos_disponiveis)))
+
+    def save_guest_info(self):
+        atualizar_dtbase('guest_data.txt', self.guest_data)
+        print("\nInformações do hóspede salvas com sucesso!")
+
+    def load_guest_info(self):
+        self.guest_data = ler_dtbase('guest_data.txt')
+        print("\nInformações dos hóspedes carregadas com sucesso!")
+
+    def update_room_status(self):
+        for hospede in self.guest_data:
+            if hospede['status']:
+                for quarto in self.quartos:
+                    if quarto.numero == hospede['quarto']:
+                        quarto.disponivel = False
+
+    def run(self):
+        while True:
+            print("\nSistema de Check-in do Hotel")
+            print("1. Registrar novo hóspede")
+            print("2. Exibir Dashboard")
+            print("3. Realizar Check-out")
+            print("4. Salvar informações")
+            print("5. Sair")
+            
+            option = input("\nEscolha uma opção: ")
+
+            if option == '1':
+                self.get_guest_info()
+            elif option == '2':
+                self.show_dashboard()
+            elif option == '3':
+                self.checkout_guest()
+            elif option == '4':
+                self.save_guest_info()
+            elif option == '5':
+                print("Saindo do sistema...")
+                break
+            else:
+                print("Opção inválida, tente novamente.")
+
+
+def atualizar_dtbase(file, hospedes):
+    with open(file, 'w') as dt:
+        for hospede in hospedes:
+            linha = f"{hospede['nome']},{hospede['quarto']},{hospede['entrada']},{hospede['saida']},{hospede['status']}\n"
+            dt.write(linha)
+
+
+def ler_dtbase(file):
+    hospedes = []
+    if os.path.exists(file):
+        with open(file, 'r') as dt:
+            for linha in dt:
+                nome, quarto, entrada, saida, status = linha.strip().split(',')
+                hospedes.append({
+                    'nome': nome,
+                    'quarto': int(quarto),
+                    'entrada': entrada,
+                    'saida': saida,
+                    'status': status == 'True'
+                })
+    return hospedes
+
+
+if __name__ == '__main__':
+    hotel = HOTEL_MANAGEMENT_checkin()
+    hotel.run()
