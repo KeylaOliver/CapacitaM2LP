@@ -9,6 +9,7 @@ def check_out(nomeHospede):
             
             hospede['nome'] = 'nome do hospede'
             hospede['entrada'] = 'data chek-in'
+            hospede['saida'] = 'data check-out'
             hospede['status'] = True
             atualizar_dtbase('dataBase.txt',hospedes)
             print(f'{nomeHospede} fez check-out \nA estadia ficou em R${valor_a_pagar}')

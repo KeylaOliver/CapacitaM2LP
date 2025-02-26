@@ -4,11 +4,12 @@ def ler_dtbase(file):
     hospedes = []
     with open(file, 'r') as dt:
         for linha in dt:
-            nome, quarto, entrada,status = linha.strip().split(',')
+            nome, quarto, entrada,saida, status = linha.strip().split(',')
             hospedes.append({
                 'nome': nome,
                 'quarto': int(quarto),
                 'entrada': entrada,
+                'saida': saida,
                 'status': bool(status)
             })
     return hospedes
